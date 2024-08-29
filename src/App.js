@@ -1,55 +1,62 @@
 import './App.css';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import { Dashboard } from './components/Dashboard';
-import { About } from './components/About';
-import { Contact } from './components/Contact';
-import { Media } from './components/Media';
+import { Home } from './Pages/Home';
+import { About } from './Pages/About';
+import { Contact } from './Pages/Contact';
+import { Media } from './Pages/Media';
 import { Header } from './components/Header';
 import { PrivateRoute } from './components/PrivateRoute';
-import { Login } from './components/Login';
+import { Help } from './Pages/Help';
+import { Footer } from './components/Footer';
+import { useState } from 'react';
 
 function App() {
-  const isAuthenticated = true;
+  const [isLogin, setIsLogin] = useState(false);
+
+  const handleLogin = () => {
+    setIsLogin((prev) => !prev);
+  };
 
   return (
     <Router>
       <div>
-        <Header />
+        <Header isLogin={isLogin} onClick={handleLogin} />
         <Routes>
-          <Route path={'/login'} element={<Login />} />
+          <Route path={'/'} element={<Home />} />
           <Route
-            path={'/'}
+            path={'/about-us'}
             element={
-              <PrivateRoute isAuthenticated={isAuthenticated}>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path={'/about'}
-            element={
-              <PrivateRoute isAuthenticated={isAuthenticated}>
+              <PrivateRoute isAuthenticated={isLogin}>
                 <About />
               </PrivateRoute>
             }
           />
           <Route
-            path={'/contact'}
+            path={'/help'}
             element={
-              <PrivateRoute isAuthenticated={isAuthenticated}>
-                <Contact />
+              <PrivateRoute isAuthenticated={isLogin}>
+                <Help />
               </PrivateRoute>
             }
           />
           <Route
             path={'/media'}
             element={
-              <PrivateRoute isAuthenticated={isAuthenticated}>
+              <PrivateRoute isAuthenticated={isLogin}>
                 <Media />
               </PrivateRoute>
             }
           />
+          <Route
+            path={'/contact'}
+            element={
+              <PrivateRoute isAuthenticated={isLogin}>
+                <Contact />
+              </PrivateRoute>
+            }
+          />
         </Routes>
+        <Footer />
       </div>
     </Router>
   );
